@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Quota Claude</title>
+<style>
+:root{--bg:#1b1b1f;--fg:#e8e8ec;--mut:#8a8a94;--bar:#2c2c33}
+@media (prefers-color-scheme:light){:root{--bg:#fafafa;--fg:#222;--mut:#777;--bar:#e3e3e8}}
+body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:14px system-ui,sans-serif}
+.row{margin-bottom:12px}.top{display:flex;justify-content:space-between;margin-bottom:4px}
+.bar{height:10px;background:var(--bar);border-radius:5px;overflow:hidden}.fill{height:100%}
+.mut{color:var(--mut);font-size:12px}
+</style></head><body>
+<div id="app" class="mut">Chargement…</div>
+<script>
+const col=p=>p<50?"#2ecc71":p<75?"#f1c40f":p<90?"#e67e22":"#e74c3c";
+const fmt=t=>new Date(t*1000).toLocaleString("fr-FR",{weekday:"short",hour:"2-digit",minute:"2-digit"});
+async function tick(){
+  let d={};try{d=await (await fetch("/quota.json")).json()}catch(e){}
+  const a=document.getElementById("app");
+  if(!d.updated_at){a.textContent="Pas de données (lancez Claude Code).";return}
+  let h="";
+  for(const w of Object.values(d.windows||{})){
+    const p=Math.round(w.used_percentage);
+    h+=`<div class=row><div class=top><b>${w.label}</b><span>${p}%${w.pace?` · x${w.pace.toFixed(1)}`:""}</span></div>
+    <div class=bar><div class=fill style="width:${Math.min(p,100)}%;background:${col(p)}"></div></div>
+    <div class=mut>reset ${w.resets_at?fmt(w.resets_at):"?"}</div></div>`;
+  }
+  const age=Math.round((Date.now()/1000-d.updated_at)/60);
+  h+=`<div class=mut>${d.model||""}${d.context_used_percentage!=null?` · ctx ${Math.round(d.context_used_percentage)}%`:""} · maj il y a ${age} min</div>`;
+  a.innerHTML=h;
+}
+tick();setInterval(tick,5000);
+</script></body></html>
