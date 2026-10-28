@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Sert les pages quota Claude (compacte / detaillee), le JSON ecrit par statusline.py
 et l'etat de la fenetre (vue courante + position de chaque vue) sur 127.0.0.1:<PORT>."""
-import http.server, json, os, threading
+import http.server, json, os, threading, time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(HERE, "data")
 JSON = os.path.join(DATA, "quota-status.json")
-STATE = os.path.join(DATA, "state.json")
+DEMO = os.environ.get("QUOTA_DEMO") == "1"   # donnees fictives, etat separe (voir demo-widget.sh)
+STATE = os.path.join(DATA, "state-demo.json" if DEMO else "state.json")
 LOG = os.path.join(DATA, "server.log")
 
 def conf():
@@ -21,7 +22,7 @@ def conf():
     return c
 
 CONF = conf()
-PORT = int(CONF.get("PORT", 8765))
+PORT = int(os.environ.get("QUOTA_PORT") or CONF.get("PORT", 8765))
 DEBUG = os.environ.get("QUOTA_DEBUG") == "1"
 
 def size(key, default):
@@ -35,6 +36,18 @@ SIZES = {"compact": size("WINDOW_SIZE", "300,230"), "detail": size("WINDOW_SIZE_
 PAGES = {"/": ("index.html", "text/html; charset=utf-8"), "/detail": ("detail.html", "text/html; charset=utf-8"),
          "/common.js": ("common.js", "application/javascript; charset=utf-8")}
 LOCK = threading.Lock()
+
+# Mode demo : (modele, contexte %, 5h %, reste 5h en s, 7j %) ; change toutes les 8 s
+SCENARIOS = [("Haiku 4.5 (x1)", 15, 8, 14400, 10), ("Sonnet 5.5 (x2)", 55, 45, 10800, 52),
+             ("Opus 5.5 (x4)", 82, 78, 7200, 70), ("Fable 5.1 (x10)", 92, 100, 3600, 90)]
+T0 = time.time()
+
+def demo_data():
+    m, ctx, p5, rest, p7 = SCENARIOS[int((time.time() - T0) // 8) % len(SCENARIOS)]
+    now = time.time()
+    return {"updated_at": now - 3, "model": m, "context_used_percentage": ctx, "windows": {
+        "five_hour": {"label": "5h", "used_percentage": p5, "resets_at": now + rest, "pace": p5 / ((1 - rest / 18000) * 100)},
+        "seven_day": {"label": "7j", "used_percentage": p7, "resets_at": now + 3 * 86400, "pace": p7 / 40.0}}}
 
 def read_state():
     try:
@@ -66,7 +79,9 @@ class H(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
-        if path == "/quota.json":
+        if path == "/quota.json" and DEMO:
+            self.send(json.dumps(demo_data()).encode(), "application/json")
+        elif path == "/quota.json":
             try:
                 self.send(open(JSON, "rb").read(), "application/json")
             except OSError:
@@ -94,4 +109,6 @@ class H(http.server.BaseHTTPRequestHandler):
             with open(LOG, "a") as f:
                 f.write("%s %s\n" % (self.log_date_time_string(), fmt % a))
 
+if DEMO:
+    threading.Timer(1200, lambda: os._exit(0)).start()   # la demo s'arrete seule apres 20 min
 http.server.ThreadingHTTPServer(("127.0.0.1", PORT), H).serve_forever()

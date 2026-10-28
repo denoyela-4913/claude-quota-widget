@@ -11,6 +11,12 @@ log() { echo "$(date +%T) $*" >> "$LOG"; }
 log "launch.sh demarre (user=$USER)"
 source "$DIR/config.env" || { log "config.env illisible"; exit 1; }
 export QUOTA_DEBUG="${QUOTA_DEBUG:-0}"
+if [ "$QUOTA_DEMO" = 1 ]; then   # demo : autre port, autre profil, autre fichier d'etat, serveur en donnees fictives
+  PORT=$((PORT + 1)); BROWSER_PROFILE="${BROWSER_PROFILE}Demo"; STATE="$DIR/data/state-demo.json"
+  export QUOTA_DEMO QUOTA_PORT=$PORT; log "mode demo (port $PORT)"
+else
+  STATE="$DIR/data/state.json"
+fi
 if [ "$QUOTA_DEBUG" = 1 ]; then
   log "mode debug : trace activee"
   log "config : PORT=$PORT WINDOW_SIZE=$WINDOW_SIZE BROWSER_EXE=$BROWSER_EXE BROWSER_PROFILE=$BROWSER_PROFILE"
@@ -23,11 +29,12 @@ if ! up; then
   log "demarrage serveur"
   python3 "$DIR/server.py" >> "$LOG" 2>&1 &
   SRV=$!
+  trap 'kill "$SRV" 2>/dev/null' EXIT   # Ctrl+C / fin : on arrete le serveur qu'on a demarre
   for _ in $(seq 30); do up && break; sleep 0.3; done
 fi
 
-# derniere vue utilisee (compact|detail) et sa position, memorisees par le serveur dans data/state.json
-read -r VIEW PX PY < <(python3 - "$DIR/data/state.json" <<'PY'
+# derniere vue utilisee (compact|detail) et sa position, memorisees par le serveur dans data/state.json (state-demo.json en demo)
+read -r VIEW PX PY < <(python3 - "$STATE" <<'PY'
 import json, sys
 try:
     st = json.load(open(sys.argv[1]))

@@ -4,6 +4,7 @@ Petite fenêtre (Chrome/Edge en mode `--app`, profil dédié) qui affiche les qu
 
 - `statusline.py` : statusline de Claude Code ; affiche la barre et écrit `data/quota-status.json`.
 - `server.py` + `index.html` (vue compacte) + `detail.html` (vue détaillée, `/detail`, 490×490 par défaut) : pages locales (127.0.0.1:PORT) rafraîchies automatiquement.
+- `demo-widget.sh` : lance le widget avec des données fictives (4 scénarios, change toutes les 8 s), sur le port PORT+1, avec son propre profil de navigateur et son propre état (`data/state-demo.json`) ; le vrai widget n'est pas touché. Ctrl+C pour arrêter (arrêt automatique après 20 min).
 - `demo.sh` : affiche les rendus de la statusline avec des données fictives (sans toucher aux vraies données).
 - `launch.sh` : démarre le serveur et ouvre la fenêtre.
 - `install.sh` : pose des questions (défauts = comptes Linux/Windows courants), écrit `config.env`
