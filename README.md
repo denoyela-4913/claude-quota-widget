@@ -12,3 +12,8 @@ Petite fenêtre (Chrome/Edge en mode `--app`, profil dédié) qui affiche les qu
 ## Installation (WSL)
     ./install.sh        # ou ./install.sh --yes pour accepter les défauts
 Le dossier ne doit plus être déplacé après installation (les chemins sont absolus ; relancer `install.sh` sinon).
+
+## Mode debug
+`./install.sh --debug` (ou `DEBUG='1'` dans `config.env`) : trace détaillée dans `data/launch.log`, requêtes HTTP dans
+`data/server.log`, et un second raccourci « Quota Claude (debug) » dont la fenêtre PowerShell reste ouverte.
+Ponctuellement : `QUOTA_DEBUG=1 ./launch.sh`.
