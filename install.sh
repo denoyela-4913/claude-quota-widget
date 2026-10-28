@@ -43,7 +43,7 @@ ask DEBUG "Mode debug (0/1)" "$DEF_DEBUG"
 echo "-> config.env ecrit"
 
 # --- raccourcis Bureau (.lnk) ---
-mklnk() { # mklnk "nom" "arguments powershell"
+mklnk() { # mklnk "nom" "arguments powershell" [style fenetre : 7=minimisee (defaut), 1=normale]
   local lnk
   lnk="$(wslpath -w "$DESKTOP_DIR")\\$1.lnk"
   powershell.exe -NoProfile -c "
@@ -51,13 +51,13 @@ mklnk() { # mklnk "nom" "arguments powershell"
 \$s.TargetPath='powershell.exe'
 \$s.Arguments='${2//\'/\'\'}'
 \$s.IconLocation='$(wslpath -w "$BROWSER_EXE"),0'
-\$s.WindowStyle=7
+\$s.WindowStyle=${3:-7}
 \$s.Save()"
   echo "-> raccourci : $DESKTOP_DIR/$1.lnk"
 }
 mklnk "Quota Claude" "-NoProfile -WindowStyle Hidden -Command \"Start-Process wsl.exe -WindowStyle Hidden -ArgumentList '-e','bash','$DIR/launch.sh'\""
 if [ "$DEBUG" = 1 ]; then
-  mklnk "Quota Claude (debug)" "-NoProfile -NoExit -Command \"wsl.exe -l -v; wsl.exe -e env QUOTA_DEBUG=1 bash $DIR/launch.sh; Write-Host ('--- fin, code retour : ' + \$LASTEXITCODE)\""
+  mklnk "Quota Claude (debug)" "-NoProfile -NoExit -Command \"wsl.exe -l -v; wsl.exe -e env QUOTA_DEBUG=1 bash $DIR/launch.sh; Write-Host ('--- fin, code retour : ' + \$LASTEXITCODE)\"" 1
 else
   rm -f "$DESKTOP_DIR/Quota Claude (debug).lnk"
 fi
