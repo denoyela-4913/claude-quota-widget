@@ -34,3 +34,6 @@ Limite : la position lue par la page (`window.screenX/Y`) est à quelques pixels
 visible, trace détaillée dans `data/launch.log`, requêtes HTTP dans `data/server.log`. Le raccourci normal reste silencieux
 (journal des étapes seulement). Ponctuellement : `QUOTA_DEBUG=1 ./launch.sh`.
 Note : `server.log` n'est alimenté que si le serveur est démarré par le raccourci de debug (arrêtez-le avant si un lancement normal l'a déjà démarré).
+
+## Licence
+MIT, voir `LICENSE`.
