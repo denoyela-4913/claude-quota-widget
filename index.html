@@ -10,7 +10,15 @@ body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:14px s
 </style></head><body>
 <div id="app" class="mut">Chargement…</div>
 <script>
-const col=p=>p<50?"#2ecc71":p<75?"#f1c40f":p<90?"#e67e22":"#e74c3c";
+const COLORS={green:"#3fb950",yellow:"#d29922",orange:"#db6d28",red:"#f85149",dark:"#6e40c9"};
+// meme regle que detail.html : le pire du pourcentage et du rythme, violet a 100 %
+function levelColor(p,pace){
+  let c=p<50?"green":p<75?"yellow":p<90?"orange":"red";
+  if(pace!=null&&p>=5){const r={green:0,yellow:1,orange:2,red:3};
+    const pc=pace<0.8?"green":pace<1.1?"yellow":pace<1.5?"orange":"red";if(r[pc]>r[c])c=pc;}
+  if(p>=100)c="dark";
+  return COLORS[c];
+}
 const fmt=t=>new Date(t*1000).toLocaleString("fr-FR",{weekday:"short",hour:"2-digit",minute:"2-digit"});
 async function tick(){
   let d={};try{d=await (await fetch("/quota.json")).json()}catch(e){}
@@ -19,8 +27,8 @@ async function tick(){
   let h="";
   for(const w of Object.values(d.windows||{})){
     const p=Math.round(w.used_percentage);
-    h+=`<div class=row><div class=top><b>${w.label}</b><span>${p}%${w.pace?` · x${w.pace.toFixed(1)}`:""}</span></div>
-    <div class=bar><div class=fill style="width:${Math.min(p,100)}%;background:${col(p)}"></div></div>
+    h+=`<div class=row><div class=top><b>${w.label}</b><span style="color:${levelColor(w.used_percentage,w.pace)};font-weight:600">${p}%</span><span class=mut>${w.pace!=null?`rythme x${w.pace.toFixed(2)}`:""}</span></div>
+    <div class=bar><div class=fill style="width:${Math.min(p,100)}%;background:${levelColor(w.used_percentage,w.pace)}"></div></div>
     <div class=mut>reset ${w.resets_at?fmt(w.resets_at):"?"}</div></div>`;
   }
   const age=Math.round((Date.now()/1000-d.updated_at)/60);
