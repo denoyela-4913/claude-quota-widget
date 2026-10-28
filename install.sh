@@ -33,12 +33,13 @@ ask BROWSER_EXE "Navigateur Windows (chemin WSL)" "$DEF_BROWSER"
 ask BROWSER_PROFILE "Profil dedie du navigateur (chemin Windows)" "${BROWSER_PROFILE:-C:\\Users\\$WIN_USER\\AppData\\Local\\ClaudeQuotaProfile}"
 ask PORT "Port local" "${PORT:-8765}"
 ask WINDOW_SIZE "Taille de fenetre (largeur,hauteur)" "${WINDOW_SIZE:-300,230}"
+ask WINDOW_SIZE_DETAIL "Taille de fenetre, vue detaillee (largeur,hauteur)" "${WINDOW_SIZE_DETAIL:-490,490}"
 ask DEBUG "Creer aussi le raccourci de debug (0/1)" "$DEF_DEBUG"
 
 [ -f "$BROWSER_EXE" ] || { echo "Navigateur introuvable : $BROWSER_EXE" >&2; exit 1; }
 [ -d "$DESKTOP_DIR" ] || { echo "Bureau introuvable : $DESKTOP_DIR" >&2; exit 1; }
 
-{ for k in WIN_USER DESKTOP_DIR BROWSER_EXE BROWSER_PROFILE PORT WINDOW_SIZE DEBUG; do
+{ for k in WIN_USER DESKTOP_DIR BROWSER_EXE BROWSER_PROFILE PORT WINDOW_SIZE WINDOW_SIZE_DETAIL DEBUG; do
     printf "%s='%s'\n" "$k" "${!k}"; done; } > "$CONF"
 echo "-> config.env ecrit"
 

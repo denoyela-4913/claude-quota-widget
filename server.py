@@ -29,7 +29,8 @@ class H(http.server.BaseHTTPRequestHandler):
             except OSError:
                 body, ctype = b"{}", "application/json"
         else:
-            body, ctype = open(os.path.join(HERE, "index.html"), "rb").read(), "text/html; charset=utf-8"
+            page = "detail.html" if self.path.startswith("/detail") else "index.html"
+            body, ctype = open(os.path.join(HERE, page), "rb").read(), "text/html; charset=utf-8"
         self.send_response(200)
         self.send_header("Content-Type", ctype)
         self.send_header("Cache-Control", "no-store")
