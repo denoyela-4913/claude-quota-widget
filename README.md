@@ -14,6 +14,12 @@ Petite fenêtre (Chrome/Edge en mode `--app`, profil dédié) qui affiche les qu
     ./install.sh        # ou ./install.sh --yes pour accepter les défauts
 Le dossier ne doit plus être déplacé après installation (les chemins sont absolus ; relancer `install.sh` sinon).
 
+## Bascule compacte / détaillée
+Bouton ⤢ / ⤡ en haut à droite de la fenêtre, ou touche `d`. La fenêtre est redimensionnée (`WINDOW_SIZE` / `WINDOW_SIZE_DETAIL`)
+et déplacée à la dernière position connue de la vue choisie. La dernière vue et la position de chaque vue sont mémorisées par
+le serveur dans `data/state.json` (non versionné) ; `launch.sh` rouvre la dernière vue avec sa taille et sa position.
+Limite : la position lue par la page (`window.screenX/Y`) est à quelques pixels près et ignorée quand le navigateur renvoie 0,0.
+
 ## Mode debug
 `./install.sh --debug` (ou `DEBUG='1'` dans `config.env`) crée en plus le raccourci « Quota Claude (debug) » : fenêtre PowerShell
 visible, trace détaillée dans `data/launch.log`, requêtes HTTP dans `data/server.log`. Le raccourci normal reste silencieux

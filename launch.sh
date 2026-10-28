@@ -26,9 +26,23 @@ if ! up; then
   for _ in $(seq 30); do up && break; sleep 0.3; done
 fi
 
-log "ouverture navigateur"
-"$BROWSER_EXE" --user-data-dir="$BROWSER_PROFILE" --app="http://localhost:$PORT" \
-  --window-size="$WINDOW_SIZE" --no-first-run --no-default-browser-check >> "$LOG" 2>&1 &
+# derniere vue utilisee (compact|detail) et sa position, memorisees par le serveur dans data/state.json
+read -r VIEW PX PY < <(python3 - "$DIR/data/state.json" <<'PY'
+import json, sys
+try:
+    st = json.load(open(sys.argv[1]))
+    v = st.get("view") if st.get("view") in ("compact", "detail") else "compact"
+    p = (st.get("pos") or {}).get(v) or ["-", "-"]
+except Exception:
+    v, p = "compact", ["-", "-"]
+print(v, p[0], p[1])
+PY
+)
+if [ "$VIEW" = detail ]; then URL="http://localhost:$PORT/detail"; SIZE="$WINDOW_SIZE_DETAIL"; else URL="http://localhost:$PORT/"; SIZE="$WINDOW_SIZE"; fi
+POS=(); [ "$PX" != "-" ] && POS=(--window-position="$PX,$PY")
+log "ouverture navigateur (vue $VIEW, taille $SIZE, position ${PX:--},${PY:--})"
+"$BROWSER_EXE" --user-data-dir="$BROWSER_PROFILE" --app="$URL" \
+  --window-size="$SIZE" "${POS[@]}" --no-first-run --no-default-browser-check >> "$LOG" 2>&1 &
 CH=$!
 log "navigateur lance (pid $CH)"
 # attendre que le navigateur ait ouvert (ou confie a l'instance existante) sa fenetre : sinon la session WSL se ferme avant
