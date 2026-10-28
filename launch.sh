@@ -20,7 +20,11 @@ fi
 log "ouverture navigateur"
 "$BROWSER_EXE" --user-data-dir="$BROWSER_PROFILE" --app="http://localhost:$PORT" \
   --window-size="$WINDOW_SIZE" --no-first-run --no-default-browser-check >> "$LOG" 2>&1 &
-log "navigateur lance (pid $!)"
+CH=$!
+log "navigateur lance (pid $CH)"
+# attendre que le navigateur ait ouvert (ou confie a l'instance existante) sa fenetre : sinon la session WSL se ferme avant
+wait "$CH"; sleep 2
+log "navigateur: fin du lancement"
 
 if [ -n "$SRV" ]; then wait "$SRV"; fi
 exit 0
