@@ -20,7 +20,8 @@ Vue compacte et vue détaillée utilisent la même règle (`levelColor`) : le pi
 (0,8 / 1,1 / 1,5), violet à 100 %. Si vous modifiez l'une, modifiez l'autre.
 
 Le nom du modèle est coloré comme dans la statusline (`modelColor` dans `common.js` : Haiku vert, Sonnet jaune, Opus orange,
-Fable/Mythos violet, autre gris). La vue compacte prend des teintes plus sombres si le thème du système est clair.
+Fable/Mythos violet, autre gris) et le pourcentage de contexte aussi (`ctxColor` : vert < 50 %, jaune < 70 %, orange < 85 %, rouge au-delà,
+comme la statusline). La vue compacte prend des teintes plus sombres si le thème du système est clair.
 
 ## Bascule compacte / détaillée
 Bouton ⤢ / ⤡ en haut à droite de la fenêtre, ou touche `d`. La fenêtre est redimensionnée (`WINDOW_SIZE` / `WINDOW_SIZE_DETAIL`)

@@ -11,6 +11,11 @@ window.modelColor = function (model, dark) {
        : (k.includes("fable") || k.includes("mythos")) ? P.fable : P.grey;
 };
 
+// Couleur du contexte, memes paliers que la statusline : vert < 50 %, jaune < 70 %, orange < 85 %, rouge au-dela.
+window.ctxColor = function (p) {
+  return p < 50 ? "#3fb950" : p < 70 ? "#d29922" : p < 85 ? "#db6d28" : "#f85149";
+};
+
 (function () {
   const VIEW = document.documentElement.dataset.view;           // "compact" | "detail"
   const OTHER = VIEW === "compact" ? "detail" : "compact";

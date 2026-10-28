@@ -111,7 +111,13 @@ function render(data) {
   mspan.style.color = modelColor(data.model, true);
   chip.append(mspan);
   const ctx = data.context_used_percentage;
-  document.getElementById("ctx-chip").textContent = "Contexte : " + (ctx !== undefined && ctx !== null ? Math.round(ctx) + "%" : "—");
+  const ctxChip = document.getElementById("ctx-chip");
+  ctxChip.textContent = "Contexte : ";
+  const cspan = document.createElement("span");
+  const hasCtx = ctx !== undefined && ctx !== null;
+  cspan.textContent = hasCtx ? Math.round(ctx) + "%" : "—";
+  if (hasCtx) cspan.style.color = ctxColor(ctx);
+  ctxChip.append(cspan);
 
   const order = [["five_hour", "Fenêtre 5 heures"], ["seven_day", "Fenêtre 7 jours"]];
   const container = document.getElementById("windows");

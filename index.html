@@ -33,7 +33,7 @@ async function tick(){
     <div class=mut>reset ${w.resets_at?fmt(w.resets_at):"?"}</div></div>`;
   }
   const age=Math.round((Date.now()/1000-d.updated_at)/60);
-  h+=`<div class=mut><span style="color:${modelColor(d.model)}">${d.model||""}</span>${d.context_used_percentage!=null?` · ctx ${Math.round(d.context_used_percentage)}%`:""} · maj il y a ${age} min</div>`;
+  h+=`<div class=mut><span style="color:${modelColor(d.model)}">${d.model||""}</span>${d.context_used_percentage!=null?` · ctx <span style="color:${ctxColor(d.context_used_percentage)}">${Math.round(d.context_used_percentage)}%</span>`:""} · maj il y a ${age} min</div>`;
   a.innerHTML=h;
 }
 tick();setInterval(tick,5000);
