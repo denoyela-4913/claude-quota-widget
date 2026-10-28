@@ -14,6 +14,7 @@ Petite fenêtre (Chrome/Edge en mode `--app`, profil dédié) qui affiche les qu
 Le dossier ne doit plus être déplacé après installation (les chemins sont absolus ; relancer `install.sh` sinon).
 
 ## Mode debug
-`./install.sh --debug` (ou `DEBUG='1'` dans `config.env`) : trace détaillée dans `data/launch.log`, requêtes HTTP dans
-`data/server.log`, et un second raccourci « Quota Claude (debug) » dont la fenêtre PowerShell reste ouverte.
-Ponctuellement : `QUOTA_DEBUG=1 ./launch.sh`.
+`./install.sh --debug` (ou `DEBUG='1'` dans `config.env`) crée en plus le raccourci « Quota Claude (debug) » : fenêtre PowerShell
+visible, trace détaillée dans `data/launch.log`, requêtes HTTP dans `data/server.log`. Le raccourci normal reste silencieux
+(journal des étapes seulement). Ponctuellement : `QUOTA_DEBUG=1 ./launch.sh`.
+Note : `server.log` n'est alimenté que si le serveur est démarré par le raccourci de debug (arrêtez-le avant si un lancement normal l'a déjà démarré).

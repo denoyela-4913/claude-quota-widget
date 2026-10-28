@@ -18,7 +18,7 @@ def conf():
 
 CONF = conf()
 PORT = int(CONF.get("PORT", 8765))
-DEBUG = os.environ.get("QUOTA_DEBUG", CONF.get("DEBUG", "0")) == "1"
+DEBUG = os.environ.get("QUOTA_DEBUG") == "1"
 LOG = os.path.join(HERE, "data", "server.log")
 
 class H(http.server.BaseHTTPRequestHandler):

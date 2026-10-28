@@ -2,7 +2,7 @@
 # Installeur : genere config.env (questions), cree le(s) raccourci(s) Bureau, branche la statusline Claude Code.
 # Usage : ./install.sh [--yes] [--debug]
 #   --yes    accepte toutes les valeurs par defaut
-#   --debug  active le mode debug (journaux detailles + raccourci "Quota Claude (debug)")
+#   --debug  cree aussi le raccourci "Quota Claude (debug)" (seul lui active les traces detaillees)
 set -e
 DIR="$(cd "$(dirname "$0")" && pwd)"
 YES=0; DEF_DEBUG=0
@@ -33,7 +33,7 @@ ask BROWSER_EXE "Navigateur Windows (chemin WSL)" "$DEF_BROWSER"
 ask BROWSER_PROFILE "Profil dedie du navigateur (chemin Windows)" "${BROWSER_PROFILE:-C:\\Users\\$WIN_USER\\AppData\\Local\\ClaudeQuotaProfile}"
 ask PORT "Port local" "${PORT:-8765}"
 ask WINDOW_SIZE "Taille de fenetre (largeur,hauteur)" "${WINDOW_SIZE:-300,230}"
-ask DEBUG "Mode debug (0/1)" "$DEF_DEBUG"
+ask DEBUG "Creer aussi le raccourci de debug (0/1)" "$DEF_DEBUG"
 
 [ -f "$BROWSER_EXE" ] || { echo "Navigateur introuvable : $BROWSER_EXE" >&2; exit 1; }
 [ -d "$DESKTOP_DIR" ] || { echo "Bureau introuvable : $DESKTOP_DIR" >&2; exit 1; }
