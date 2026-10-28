@@ -34,14 +34,8 @@ ask WINDOW_SIZE "Taille de fenetre (largeur,hauteur)" "${WINDOW_SIZE:-300,230}"
 [ -f "$BROWSER_EXE" ] || { echo "Navigateur introuvable : $BROWSER_EXE" >&2; exit 1; }
 [ -d "$DESKTOP_DIR" ] || { echo "Bureau introuvable : $DESKTOP_DIR" >&2; exit 1; }
 
-cat > "$CONF" <<CFG
-WIN_USER=$WIN_USER
-DESKTOP_DIR=$DESKTOP_DIR
-BROWSER_EXE=$BROWSER_EXE
-BROWSER_PROFILE=$BROWSER_PROFILE
-PORT=$PORT
-WINDOW_SIZE=$WINDOW_SIZE
-CFG
+{ for k in WIN_USER DESKTOP_DIR BROWSER_EXE BROWSER_PROFILE PORT WINDOW_SIZE; do
+    printf "%s='%s'\n" "$k" "${!k}"; done; } > "$CONF"
 echo "-> config.env ecrit"
 
 # --- raccourci Bureau (.lnk) ---

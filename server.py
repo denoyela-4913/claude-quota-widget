@@ -9,7 +9,7 @@ def port():
     try:
         for line in open(os.path.join(HERE, "config.env")):
             if line.startswith("PORT="):
-                return int(line.split("=", 1)[1].strip())
+                return int(line.split("=", 1)[1].strip().strip("'\""))
     except (OSError, ValueError):
         pass
     return 8765
