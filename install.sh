@@ -58,7 +58,7 @@ echo "-> raccourci : $DESKTOP_DIR/Quota Claude.lnk"
 
 # --- statusline Claude Code ---
 mkdir -p "$DIR/data" "$HOME/.claude"
-[ -f "$SETTINGS" ] && cp "$SETTINGS" "$SETTINGS.bak-quota-$(date +%Y%m%d%H%M%S)"
+ls "$SETTINGS".bak-quota-* >/dev/null 2>&1 || { [ -f "$SETTINGS" ] && cp "$SETTINGS" "$SETTINGS.bak-quota-$(date +%Y%m%d%H%M%S)"; }
 python3 - "$SETTINGS" "$DIR/statusline.py" <<'PY'
 import json, sys, os
 p, script = sys.argv[1:3]
