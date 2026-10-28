@@ -4,6 +4,7 @@ Petite fenêtre (Chrome/Edge en mode `--app`, profil dédié) qui affiche les qu
 
 - `statusline.py` : statusline de Claude Code ; affiche la barre et écrit `data/quota-status.json`.
 - `server.py` + `index.html` : page locale (127.0.0.1:PORT) rafraîchie toutes les 5 s.
+- `demo.sh` : affiche les rendus de la statusline avec des données fictives (sans toucher aux vraies données).
 - `launch.sh` : démarre le serveur et ouvre la fenêtre.
 - `install.sh` : pose des questions (défauts = comptes Linux/Windows courants), écrit `config.env`
   (non versionné, voir `config.template.env`), crée le raccourci Bureau, branche `statusLine` dans `~/.claude/settings.json`.

@@ -62,7 +62,7 @@ for key, label, span, fmt in (("five_hour", "5h", 5*3600, "%H:%M"), ("seven_day"
 print(c(GREY, " | ").join(parts))
 
 try:
-    out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "quota-status.json")
+    out_path = os.environ.get("QUOTA_STATUS_FILE") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "quota-status.json")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     tmp_path = out_path + ".tmp"
     with open(tmp_path, "w") as f:
