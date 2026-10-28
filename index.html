@@ -7,7 +7,8 @@ body{margin:0;padding:14px 16px;background:var(--bg);color:var(--fg);font:14px s
 .row{margin-bottom:12px}.top{display:flex;justify-content:space-between;margin-bottom:4px}
 .bar{height:10px;background:var(--bar);border-radius:5px;overflow:hidden}.fill{height:100%}
 .mut{color:var(--mut);font-size:12px}
-</style></head><body>
+</style><script src="/common.js"></script>
+</head><body>
 <div id="app" class="mut">Chargement…</div>
 <script>
 const COLORS={green:"#3fb950",yellow:"#d29922",orange:"#db6d28",red:"#f85149",dark:"#6e40c9"};
@@ -32,9 +33,8 @@ async function tick(){
     <div class=mut>reset ${w.resets_at?fmt(w.resets_at):"?"}</div></div>`;
   }
   const age=Math.round((Date.now()/1000-d.updated_at)/60);
-  h+=`<div class=mut>${d.model||""}${d.context_used_percentage!=null?` · ctx ${Math.round(d.context_used_percentage)}%`:""} · maj il y a ${age} min</div>`;
+  h+=`<div class=mut><span style="color:${modelColor(d.model)}">${d.model||""}</span>${d.context_used_percentage!=null?` · ctx ${Math.round(d.context_used_percentage)}%`:""} · maj il y a ${age} min</div>`;
   a.innerHTML=h;
 }
 tick();setInterval(tick,5000);
-</script><script src="/common.js"></script>
-</body></html>
+</script></body></html>

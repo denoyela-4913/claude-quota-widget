@@ -1,5 +1,16 @@
 // Bascule compacte <-> detaillee : bouton + touche "d". Redimensionne et repositionne la fenetre ;
 // la vue courante et la position de chaque vue sont memorisees cote serveur (data/state.json).
+// Couleur du modele, comme la statusline (statusline.py) : haiku vert, sonnet jaune, opus orange, fable/mythos violet, autre gris.
+// dark=true : teintes du terminal (fond sombre) ; sinon teintes plus sombres si le theme systeme est clair.
+window.modelColor = function (model, dark) {
+  const k = String(model || "").toLowerCase();
+  const light = !dark && window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches;
+  const P = light ? { haiku: "#00a844", sonnet: "#a39600", opus: "#d96c00", fable: "#7a4fd6", grey: "#6b6b6b" }
+                  : { haiku: "#00d75f", sonnet: "#ffff00", opus: "#ff8700", fable: "#af87ff", grey: "#8a8a8a" };
+  return k.includes("haiku") ? P.haiku : k.includes("sonnet") ? P.sonnet : k.includes("opus") ? P.opus
+       : (k.includes("fable") || k.includes("mythos")) ? P.fable : P.grey;
+};
+
 (function () {
   const VIEW = document.documentElement.dataset.view;           // "compact" | "detail"
   const OTHER = VIEW === "compact" ? "detail" : "compact";

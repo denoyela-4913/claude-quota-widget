@@ -66,6 +66,7 @@
   }
   #status.stale { color: var(--red); }
 </style>
+<script src="/common.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -103,7 +104,12 @@ function fmtDate(ts) {
 }
 
 function render(data) {
-  document.getElementById("model-chip").textContent = "Modèle : " + (data.model || "—");
+  const chip = document.getElementById("model-chip");
+  chip.textContent = "Modèle : ";
+  const mspan = document.createElement("span");
+  mspan.textContent = data.model || "—";
+  mspan.style.color = modelColor(data.model, true);
+  chip.append(mspan);
   const ctx = data.context_used_percentage;
   document.getElementById("ctx-chip").textContent = "Contexte : " + (ctx !== undefined && ctx !== null ? Math.round(ctx) + "%" : "—");
 
@@ -157,6 +163,5 @@ async function poll() {
 poll();
 setInterval(poll, 3000);
 </script>
-<script src="/common.js"></script>
 </body>
 </html>

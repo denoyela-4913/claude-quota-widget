@@ -19,6 +19,9 @@ Le dossier ne doit plus être déplacé après installation (les chemins sont ab
 Vue compacte et vue détaillée utilisent la même règle (`levelColor`) : le pire du palier de pourcentage (50/75/90 %) et du palier de rythme
 (0,8 / 1,1 / 1,5), violet à 100 %. Si vous modifiez l'une, modifiez l'autre.
 
+Le nom du modèle est coloré comme dans la statusline (`modelColor` dans `common.js` : Haiku vert, Sonnet jaune, Opus orange,
+Fable/Mythos violet, autre gris). La vue compacte prend des teintes plus sombres si le thème du système est clair.
+
 ## Bascule compacte / détaillée
 Bouton ⤢ / ⤡ en haut à droite de la fenêtre, ou touche `d`. La fenêtre est redimensionnée (`WINDOW_SIZE` / `WINDOW_SIZE_DETAIL`)
 et déplacée à la dernière position connue de la vue choisie. La dernière vue et la position de chaque vue sont mémorisées par
